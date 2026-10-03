@@ -26,6 +26,7 @@ class Data(BaseModel):
     hours_per_week: int = Field(..., example=40, alias="hours-per-week")
     native_country: str = Field(..., example="United-States", alias="native-country")
 
+'''
 path = None # TODO: enter the path for the saved encoder 
 encoder = load_model(path)
 
@@ -41,7 +42,26 @@ async def get_root():
     """ Say hello!"""
     # your code here
     pass
+'''
 
+project_path = os.path.dirname(os.path.abspath(__file__))
+
+encoder_path = os.path.join(project_path, "model", "encoder.pkl")
+encoder = load_model(encoder_path)
+
+model_path = os.path.join(project_path, "model", "model.pkl")
+model = load_model(model_path)
+
+app = FastAPI(
+    title="Census Income Prediction API",
+    version="1.0.0",
+)
+
+
+@app.get("/")
+async def get_root():
+    """Return a welcome message."""
+    return {"message": "Welcome to the Census Income Prediction API"}
 
 # TODO: create a POST on a different path that does model inference
 @app.post("/data/")
@@ -64,6 +84,7 @@ async def post_inference(data: Data):
         "sex",
         "native-country",
     ]
+    '''
     data_processed, _, _, _ = process_data(
         # your code here
         # use data as data input
@@ -72,3 +93,13 @@ async def post_inference(data: Data):
     )
     _inference = None # your code here to predict the result using data_processed
     return {"result": apply_label(_inference)}
+    '''
+    data_processed, _, _, _ = process_data(
+        data,
+        categorical_features=cat_features,
+        training=False,
+        encoder=encoder,
+    )
+
+    prediction = inference(model, data_processed)
+    return {"result": apply_label(prediction)}
