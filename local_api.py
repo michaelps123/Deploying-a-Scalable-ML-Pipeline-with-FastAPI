@@ -1,16 +1,6 @@
-import json
+#import json
 
 import requests
-
-'''
-# TODO: send a GET using the URL http://127.0.0.1:8000
-r = None # Your code here
-
-# TODO: print the status code
-# print()
-# TODO: print the welcome message
-# print()
-'''
 
 BASE_URL = "http://127.0.0.1:8000"
 
@@ -35,16 +25,6 @@ data = {
     "hours-per-week": 40,
     "native-country": "United-States",
 }
-
-'''
-# TODO: send a POST using the data above
-r = None # Your code here
-
-# TODO: print the status code
-# print()
-# TODO: print the result
-# print()
-'''
 
 post_response = requests.post(
     f"{BASE_URL}/data/",

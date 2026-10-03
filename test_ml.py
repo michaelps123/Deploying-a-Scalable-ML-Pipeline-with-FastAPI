@@ -1,5 +1,4 @@
 import pytest
-# TODO: add necessary import
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
@@ -23,7 +22,6 @@ def training_data():
     return X, y
 
 
-# TODO: implement the first test. Change the function name and input as needed
 def test_train_model_and_inference(training_data):
     """
     The trained model should return one valid prediction per row.
@@ -38,7 +36,6 @@ def test_train_model_and_inference(training_data):
     assert set(np.unique(predictions)).issubset({0, 1})
 
 
-# TODO: implement the second test. Change the function name and input as needed
 def test_compute_model_metrics():
     """
     Metric calculations should match known expected values.
@@ -53,7 +50,6 @@ def test_compute_model_metrics():
     assert fbeta == pytest.approx(0.8)
 
 
-# TODO: implement the third test. Change the function name and input as needed
 def test_save_and_load_model(training_data, tmp_path):
     """
     A serialized model should retain its predictions after loading.

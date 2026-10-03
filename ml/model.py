@@ -1,7 +1,6 @@
 import pickle
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from ml.data import process_data
-# TODO: add necessary import
 from sklearn.ensemble import RandomForestClassifier
 
 # Optional: implement hyperparameter tuning.
@@ -121,7 +120,6 @@ def performance_on_categorical_slice(
     fbeta : float
 
     """
-    # TODO: implement the function
     X_slice, y_slice, _, _ = process_data(
         data.loc[data[column_name] == slice_value].copy(),
         categorical_features=categorical_features,
