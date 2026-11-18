@@ -121,4 +121,16 @@ This project was completed as part of the Udacity Machine Learning DevOps curric
 
 The completed coursework implementation includes the model training and evaluation workflow, test cases, serialized model handling, and FastAPI inference service.
 
+
+***
+Local Verification — November 17, 2026
+
+Successfully validated on Linux using Python 3.10:
+- Dependencies installed successfully.
+- All three existing unit tests passed.
+- FastAPI application started successfully.
+- GET and POST endpoints returned HTTP 200.
+- Example API client successfully returned a model prediction.
+
+***
 The repository is retained as a demonstration of foundational ML engineering and model-serving skills.
