@@ -1,32 +1,124 @@
-Working in a command line environment is recommended for ease of use with git and dvc. If on Windows, WSL1 or 2 is recommended.
+# Census Income Classification — FastAPI ML Inference
 
-# Machine Learning DevOps Project 2
-GitHub repository: https://github.com/michaelps123/Deploying-a-Scalable-ML-Pipeline-with-FastAPI
+A machine-learning project demonstrating the process of training, evaluating, serializing, and serving a classification model through a REST API.
 
-# Environment Set up (pip or conda)
-* Option 1: use the supplied file `environment.yml` to create a new environment with conda
-* Option 2: use the supplied file `requirements.txt` to create a new environment with pip
-    
-## Repositories
-* Create a directory for the project and initialize git.
-    * As you work on the code, continually commit changes. Trained models you want to use in production must be committed to GitHub.
-* Connect your local git repo to GitHub.
-* Setup GitHub Actions on your repo. You can use one of the pre-made GitHub Actions if at a minimum it runs pytest and flake8 on push and requires both to pass without error.
-    * Make sure you set up the GitHub Action to have the same version of Python as you used in development.
+Built with **Python, scikit-learn, pandas, and FastAPI** as part of Udacity's Machine Learning DevOps coursework.
 
-# Data
-* Download census.csv and commit it to dvc.
-* This data is messy, try to open it in pandas and see what you get.
-* To clean it, use your favorite text editor to remove all spaces.
+## Project Overview
 
-# Model
-* Using the starter code, write a machine learning model that trains on the clean data and saves the model. Complete any function that has been started.
-* Write unit tests for at least 3 functions in the model code.
-* Write a function that outputs the performance of the model on slices of the data.
-    * Suggestion: for simplicity, the function can just output the performance on slices of just the categorical features.
-* Write a model card using the provided template.
+This project uses the Census Income dataset to predict whether an individual's annual income exceeds $50,000 based on demographic and employment-related features.
 
-# API Creation
-*  Create a RESTful API using FastAPI this must implement:
-    * GET on the root giving a welcome message.
-    * POST that does model inference.
+The objective is to demonstrate a practical ML workflow, from data preprocessing and model training through evaluation and API-based inference.
+
+### Key Capabilities
+
+- **Model Training:** Random Forest classifier using scikit-learn.
+- **Data Processing:** One-hot encoding of categorical features, with preprocessing reused during inference.
+- **Model Evaluation:** Precision, recall, and F1 score, including analysis across categorical data slices.
+- **Model Serialization:** Save and reload trained model and encoder artifacts.
+- **REST API:** FastAPI application providing prediction requests.
+- **Testing:** Pytest coverage for model training, inference, metrics, and serialization.
+
+## Model Performance
+
+The model was evaluated using a stratified 80/20 train-test split of 32,561 census records.
+
+| Metric | Result |
+|---|---:|
+| Precision | 0.7353 |
+| Recall | 0.6378 |
+| F1 Score | 0.6831 |
+
+Metrics are for the income `>50K` class.
+
+Additional evaluation details and limitations are documented in [model_card.md](model_card.md). Performance across categorical subsets is recorded in [slice_output.txt](slice_output.txt).
+
+## Running Locally
+
+The project was developed with Python 3.10 dependencies.
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/michaelps123/Deploying-a-Scalable-ML-Pipeline-with-FastAPI.git
+cd Deploying-a-Scalable-ML-Pipeline-with-FastAPI
+
+python3.10 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Train the model
+
+The training script expects the Census Income dataset at `data/census.csv`.
+
+```bash
+python train_model.py
+```
+
+This trains and evaluates the classifier, saves the model and encoder under `model/`, and generates categorical-slice evaluation results.
+
+### 3. Start the API
+
+```bash
+uvicorn main:app --reload
+```
+
+The API runs locally at:
+
+`http://127.0.0.1:8000`
+
+Interactive FastAPI documentation:
+
+`http://127.0.0.1:8000/docs`
+
+### 4. Test predictions
+
+The application exposes two endpoints:
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /` | Returns a welcome message |
+| `POST /data/` | Accepts census features and returns an income classification |
+
+An example API client is included:
+
+```bash
+python local_api.py
+```
+
+The inference endpoint returns JSON containing a `result` field with either `>50K` or `<=50K`.
+
+### 5. Run unit tests
+
+```bash
+pytest -q
+```
+
+## Repository Structure
+
+| File or Directory | Purpose |
+|---|---|
+| `train_model.py` | Training and model evaluation |
+| `main.py` | FastAPI application |
+| `ml/` | Preprocessing and ML functions |
+| `local_api.py` | Example API client |
+| `test_ml.py` | Unit tests |
+| `model_card.md` | Model documentation and limitations |
+| `slice_output.txt` | Evaluation across categorical slices |
+
+## Limitations and Responsible Use
+
+This is an educational demonstration, not a production decision-making system.
+
+The underlying dataset is historical and includes sensitive demographic attributes. Predictions may reflect existing biases in the data.
+
+The model should not be used to make employment, financial, or other consequential decisions about individuals. Additional validation, fairness analysis, and monitoring would be necessary for real-world applications.
+
+## Project Background
+
+This project was completed as part of the Udacity Machine Learning DevOps curriculum, using the [original Udacity starter repository](https://github.com/udacity/Deploying-a-Scalable-ML-Pipeline-with-FastAPI).
+
+The completed coursework implementation includes the model training and evaluation workflow, test cases, serialized model handling, and FastAPI inference service.
+
+The repository is retained as a demonstration of foundational ML engineering and model-serving skills.
